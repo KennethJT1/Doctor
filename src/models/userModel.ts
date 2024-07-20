@@ -1,6 +1,12 @@
 import { model, Schema, Types, Document, Model } from "mongoose";
-import * as bcrypt from 'bcryptjs';
-import * as jwt from "jsonwebtoken"
+import * as bcrypt from "bcryptjs";
+import * as jwt from "jsonwebtoken";
+
+interface CustomNotification {
+  type: string;
+  message: string;
+  onCLickPath: string;
+}
 
 export interface IUser extends Document {
   name: string;
@@ -8,12 +14,11 @@ export interface IUser extends Document {
   password: string;
   isAdmin?: boolean;
   isDoctor?: boolean;
-  notifcation?: [];
-  seenNotification?: [];
+  notifcation?: CustomNotification[];
+  seenNotification?: CustomNotification[];
 
-  matchPassword(enteredPassword: string): Promise<boolean>; 
-  getSignedJwtToken(): Promise<any>; 
-
+  matchPassword(enteredPassword: string): Promise<boolean>;
+  getSignedJwtToken(): Promise<any>;
 }
 
 const userSchema: Schema<IUser> = new Schema<IUser>(
@@ -43,14 +48,20 @@ const userSchema: Schema<IUser> = new Schema<IUser>(
       type: Boolean,
       default: false,
     },
-    notifcation: {
-      type: Array,
-      default: [],
-    },
-    seenNotification: {
-      type: Array,
-      default: [],
-    },
+    notifcation: [
+      {
+        type: String,
+        message: String,
+        onCLickPath: String,
+      },
+    ],
+    seenNotification: [
+      {
+        type: String,
+        message: String,
+        onCLickPath: String,
+      },
+    ],
   },
   {
     timestamps: true,
@@ -58,17 +69,16 @@ const userSchema: Schema<IUser> = new Schema<IUser>(
 );
 
 userSchema.pre<IUser>("save", async function (next) {
-  if(!this.isModified('password')) {
+  if (!this.isModified("password")) {
     next();
-  };
-
+  }
 
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
-  } catch (err:any) {
-    console.error("Failed to modify password",err);
+  } catch (err: any) {
+    console.error("Failed to modify password", err);
     next(err);
   }
 });
