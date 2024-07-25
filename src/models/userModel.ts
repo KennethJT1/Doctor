@@ -5,7 +5,7 @@ import * as jwt from "jsonwebtoken";
 interface CustomNotification {
   type: string;
   message: string;
-  onCLickPath: string;
+  onClickPath: string;
 }
 
 export interface IUser extends Document {
@@ -14,7 +14,7 @@ export interface IUser extends Document {
   password: string;
   isAdmin?: boolean;
   isDoctor?: boolean;
-  notifcation?: CustomNotification[];
+  notifcation: CustomNotification[];
   seenNotification?: CustomNotification[];
 
   matchPassword(enteredPassword: string): Promise<boolean>;
@@ -52,14 +52,14 @@ const userSchema: Schema<IUser> = new Schema<IUser>(
       {
         type: String,
         message: String,
-        onCLickPath: String,
+        onClickPath: String,
       },
     ],
     seenNotification: [
       {
         type: String,
         message: String,
-        onCLickPath: String,
+        onClickPath: String,
       },
     ],
   },

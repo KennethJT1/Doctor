@@ -7,7 +7,7 @@ import User from "../models/userModel";
 interface CustomNotification {
   type: string;
   message: string;
-  onCLickPath: string;
+  onClickPath: string;
 }
 
 export const doctorInfo = async (req: JwtPayload, res: Response) => {
@@ -113,7 +113,7 @@ export const updateDoctorStatus = async (req: JwtPayload, res: Response) => {
     notifcation.push({
       type: "status-updated",
       message: `Your appointment has been updated to ${status}`,
-      onCLickPath: "/doctor-appointments",
+      onClickPath: "/doctor-appointments",
     });
     user.notifcation = notifcation;
 

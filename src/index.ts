@@ -7,6 +7,7 @@ dotenv.config();
 
 import userRouter from "./routes/user";
 import doctorRouter from "./routes/doctor";
+import adminRouter from "./routes/admin";
 
 const app: Express = express();
 
@@ -19,6 +20,7 @@ app.use(morgan("dev"));
 
 app.use("/", userRouter);
 app.use("/doctor", doctorRouter);
+app.use("/admin", adminRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Doctor + Booking server");
